@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
+
+# Raw training data (large, not committed - see README for how to regenerate)
+data/hotwheels_raw/
+
+# Large media (not committed - see README for how to obtain)
+media/videos/*.mp4
