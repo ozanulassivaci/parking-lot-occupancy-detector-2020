@@ -64,7 +64,7 @@ the full photo set. Classify a cropped spot photo:
 
 ```bash
 cd src/hotwheels_parking
-python detect.py ../../data/hotwheels_samples/occupied/789784634586_1121.jpg
+python detect.py ../../data/hotwheels_samples/occupied/145353551.jpg
 ```
 
 To retrain (e.g. on your own photos, dropped into `occupied/` and `empty/`
@@ -94,9 +94,9 @@ tests/                   unit tests
 
 ## Limitations
 
-- The Hot Wheels dataset is small and imbalanced (138 occupied vs. 25 empty
-  photos), so the classifier is biased toward predicting "occupied" and only
-  reaches about 88% held-out accuracy.
+- The Hot Wheels dataset is small and imbalanced (25 occupied vs. 138 empty
+  photos), so the classifier is biased toward predicting "empty" and only
+  reaches about 90% held-out accuracy.
 - The real parking lot detector needs a GUI-capable OpenCV build
   (`opencv-python`, not `opencv-python-headless`) since it displays results
   in a window.
