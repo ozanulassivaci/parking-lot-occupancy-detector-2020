@@ -127,13 +127,15 @@ tests/                   unit tests
 
 > TODO: add the course/resource that inspired this project
 
-I came across a similar project that used OpenCV to detect occupied and
-empty spots from a real parking lot camera feed, and wanted to try the same
-idea myself — using a Hot Wheels toy parking lot instead of a real camera,
-since that's what I had on hand. This project was a simple self-study
-exercise I built in high school (2020) to develop my computer/programming
-skills through courses I was taking at the time. It was reorganized and
-cleaned up in 2026 for public release.
+The real parking lot detector's core logic (the coordinate-marking tool and
+the Laplacian-based occupancy check) is taken from
+[olgarose/ParkingLot](https://github.com/olgarose/ParkingLot), which I came
+across and wanted to try out myself. The Hot Wheels part is my own addition
+on top of it: applying the same idea to a toy parking lot instead of a real
+camera, since that's what I had on hand. This project was a simple
+self-study exercise I built in high school (2020) to develop my
+computer/programming skills through courses I was taking at the time. It
+was reorganized and cleaned up in 2026 for public release.
 
 ## License
 
