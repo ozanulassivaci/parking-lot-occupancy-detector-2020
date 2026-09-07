@@ -14,12 +14,18 @@ on my own photos of a Hot Wheels toy parking lot.
   Laplacian filter) inside each spot's region against a threshold — an empty,
   flat asphalt patch has far less high-frequency detail than one with a car
   parked on it.
-- **Hot Wheels parking lot classifier** (`src/hotwheels_parking/`): a small
-  image classifier trained on photos I took of Hot Wheels cars in a toy
-  parking lot. Each cropped spot photo is reduced to a 16-bin histogram of
-  gradient orientations (a hand-rolled, lightweight stand-in for HOG, since
-  the OpenCV build used here doesn't ship the `ml` module), and a linear SVM
-  classifies the spot as `occupied` or `empty`.
+- **Hot Wheels parking lot classifier** (`src/hotwheels_parking/`): two ways
+  to classify photos I took of Hot Wheels cars in a toy parking lot:
+  - `laplacian_detector.py` applies the exact same idea as the real parking
+    lot detector — an empty, flat spot has far less high-frequency detail
+    than one with a car on it — directly to the whole photo. On this dataset
+    it gets every sample right (100%), better than the trained classifier,
+    since these are already tightly cropped single-spot photos rather than
+    a small region carved out of a wider camera frame.
+  - `train.py`/`detect.py` reduce each cropped spot photo to a 16-bin
+    histogram of gradient orientations (a hand-rolled, lightweight stand-in
+    for HOG, since the OpenCV build originally used here didn't ship the
+    `ml` module) and classify it with a linear SVM.
 
 ## Tech stack
 
@@ -59,19 +65,31 @@ python main.py --data ../../data/coordinates/parking_lot_1.yml \
 
 ### Hot Wheels parking lot classifier
 
-A pre-trained model (`data/hotwheels_model.joblib`) is included, trained on
-the full photo set. Classify a cropped spot photo:
+Edge-density thresholding (no training needed, add `--show` to see it in a window):
 
 ```bash
 cd src/hotwheels_parking
+python laplacian_detector.py ../../data/hotwheels_samples/occupied/145353551.jpg
+```
+
+Or the trained classifier — a pre-trained model (`data/hotwheels_model.joblib`)
+is included, trained on the full photo set:
+
+```bash
 python detect.py ../../data/hotwheels_samples/occupied/145353551.jpg
 ```
 
-To retrain (e.g. on your own photos, dropped into `occupied/` and `empty/`
-subfolders):
+To retrain the classifier (e.g. on your own photos, dropped into `occupied/`
+and `empty/` subfolders):
 
 ```bash
 python train.py --data path/to/your/dataset --model path/to/save/model.joblib
+```
+
+To re-calibrate the edge-density threshold on your own labeled dataset:
+
+```bash
+python laplacian_detector.py --calibrate path/to/your/dataset
 ```
 
 ## Project structure
@@ -95,8 +113,10 @@ tests/                   unit tests
 ## Limitations
 
 - The Hot Wheels dataset is small and imbalanced (25 occupied vs. 138 empty
-  photos), so the classifier is biased toward predicting "empty" and only
-  reaches about 90% held-out accuracy.
+  photos), so the trained SVM classifier (`train.py`/`detect.py`) is biased
+  toward predicting "empty" and only reaches about 90% held-out accuracy.
+  The edge-density threshold in `laplacian_detector.py` isn't affected by
+  this, since it doesn't train on the class balance.
 - The real parking lot detector needs a GUI-capable OpenCV build
   (`opencv-python`, not `opencv-python-headless`) since it displays results
   in a window.
